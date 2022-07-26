@@ -1,48 +1,59 @@
 import Form from '../Form';
 import Contacts from '../Contacts';
 import { Section } from './App.styled';
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import Notiflix from 'notiflix';
 
-class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
-  formSubmitHandler = data => {
-    this.state.contacts.find(i => i.name === data.name)
+function App() {
+  // const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(
+    () => JSON.parse(localStorage.getItem('contacts')) || []
+  );
+
+  const [filter, setFilter] = useState('');
+
+  ///===================================================================??????????????????????????????????????????
+  // useEffect(() => {
+  //   const parsedContacts = JSON.parse(localStorage.getItem('contacts'));
+  //   if (parsedContacts) {
+  //     console.log('1 раз');
+  //     setContacts(parsedContacts);
+  //   }
+  // }, []);
+  ///===================================================================??????????????????????????????????????????
+
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
+
+  const formSubmitHandler = data => {
+    contacts.find(i => i.name === data.name)
       ? Notiflix.Notify.failure('That name already in the list', {
           position: 'center-center',
         })
-      : this.setState(prevState => {
-          return { contacts: [data, ...prevState.contacts] };
-        });
+      : setContacts([data, ...contacts]);
     console.log(data);
   };
-  filterHandler = e => {
-    this.setState({
-      filter: e.currentTarget.value.toLowerCase(),
-    });
+  const filterHandler = e => {
+    console.log(e.currentTarget.value);
+    setFilter(e.currentTarget.value.toLowerCase());
   };
 
-  onDeleteContactHandler = id => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(i => i.id !== id),
-    }));
+  const onDeleteContactHandler = id => {
+    setContacts(contacts.filter(i => i.id !== id));
   };
 
-  render() {
-    return (
-      <Section>
-        <Form onSubmit={this.formSubmitHandler} />
-        <Contacts
-          state={this.state}
-          filter={this.filterHandler}
-          onDelete={this.onDeleteContactHandler}
-        />
-      </Section>
-    );
-  }
+  return (
+    <Section>
+      <Form onSubmit={formSubmitHandler} />
+      <Contacts
+        contacts={contacts}
+        filterValue={filter}
+        filterHandler={filterHandler}
+        onDelete={onDeleteContactHandler}
+      />
+    </Section>
+  );
 }
 
 export default App;
