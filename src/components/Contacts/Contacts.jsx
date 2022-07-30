@@ -17,7 +17,11 @@ function Contacts({ contacts, filterValue, onDelete, filterHandler }) {
     <div>
       <h2>Contacts</h2>
       {contacts.length && (
-        <Filter title={'Find contacts by name'} filter={filterHandler} />
+        <Filter
+          title={'Find contacts by name'}
+          filter={filterHandler}
+          filterValue={filterValue}
+        />
       )}
 
       <Ul>
@@ -63,9 +67,16 @@ function Contacts({ contacts, filterValue, onDelete, filterHandler }) {
 }
 
 Contacts.propTypes = {
-  contacts: PropTypes.array.isRequired,
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    })
+  ),
   filterValue: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
+  filterHandler: PropTypes.func.isRequired,
 };
 
 export default Contacts;

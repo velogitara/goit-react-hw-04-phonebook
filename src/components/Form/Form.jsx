@@ -7,11 +7,6 @@ function Form({ onSubmit }) {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  // state = {
-  //   name: '',
-  //   number: '',
-  // };
-
   const reset = () => {
     setName('');
     setNumber('');

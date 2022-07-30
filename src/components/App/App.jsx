@@ -9,7 +9,6 @@ function App() {
   const [contacts, setContacts] = useState(
     () => JSON.parse(localStorage.getItem('contacts')) || []
   );
-
   const [filter, setFilter] = useState('');
 
   ///===================================================================??????????????????????????????????????????
@@ -27,15 +26,15 @@ function App() {
   }, [contacts]);
 
   const formSubmitHandler = data => {
-    contacts.find(i => i.name === data.name)
+    contacts.find(i => i.name.toLowerCase() === data.name.toLowerCase())
       ? Notiflix.Notify.failure('That name already in the list', {
           position: 'center-center',
         })
       : setContacts([data, ...contacts]);
-    console.log(data);
+    // console.log(data);
   };
   const filterHandler = e => {
-    console.log(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
     setFilter(e.currentTarget.value.toLowerCase());
   };
 
